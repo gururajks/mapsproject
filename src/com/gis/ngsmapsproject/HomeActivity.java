@@ -1,4 +1,6 @@
-package com.example.ngsmapsproject;
+package com.gis.ngsmapsproject;
+
+import com.example.ngsmapsproject.R;
 
 import android.os.Bundle;
 import android.app.Activity;
