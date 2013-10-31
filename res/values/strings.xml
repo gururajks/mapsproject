@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NGSMapsProject</string>
+    <string name="app_name">NGS Control</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
+    
+    <string-array name="control_type">
+        <item >X-0-0</item>
+        <item >H-G-0</item>
+        <item >H-0-0</item>
+        <item >H-A-0</item>
+        <item >H-B-0</item>
+        <item >H-1-0</item>
+        <item >H-2-0</item>
+        <item >V-0-0</item>
+        <item >V-1-0</item>
+        <item >V-2-0</item>
+        <item >V-G-0</item>
+        <item >TID-0</item>
+        <item >MOD-0</item>
+        <item >GPS-0</item>
+        <item >F-C-0</item>
+        <item >P-S-0</item>
+        <item >COR-0</item>
+        <item >D-D-0</item>        
+    </string-array>
+    
+    <string-array name="radius_unit">
+        <item>Miles</item>
+        <item>Km</item>
+    </string-array>
+    
 </resources>

@@ -35,15 +35,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <uses-library android:name="com.google.android.maps" />
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAAKvHOcVf0XMBX-pxrHPW3QxXh7-tS3FA" />
         
-        
+        <activity
+            android:name="com.gis.ngsmapsproject.Settings"  
+            android:label="Settings">            
+            <meta-data
+          		android:name="android.support.PARENT_ACTIVITY"
+           		android:value="com.gis.ngsmapsproject.HomeActivity" />       
+           		      
+         </activity>
+            
         
     </application>
+    
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
 
 </manifest>

@@ -1,0 +1,66 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+        
+    <EditText
+        android:id="@+id/radius_latitude" 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:inputType="numberDecimal"
+        android:hint="Lattitude" />
+    
+    <EditText 
+        android:id="@+id/radius_longitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radius_latitude"
+        android:inputType="numberSigned|numberDecimal"
+        android:hint="Longitude" />
+    
+    <LinearLayout 
+        android:id="@+id/radiusLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radius_longitude"
+        android:orientation="horizontal">
+        <EditText 
+	        android:id="@+id/radius" 
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:inputType="numberDecimal"
+	        android:layout_weight="0.7"      
+	        android:hint="Radius" />
+	        
+	    <Spinner 
+	        android:id="@+id/radius_unit"
+	        android:layout_width="0dp"
+	        android:layout_weight="0.3"
+	        android:layout_height="wrap_content"
+	        android:entries="@array/radius_unit" />        
+    </LinearLayout>
+   <!-- 
+    <RelativeLayout 
+        android:id="@+id/radiusToggleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radiusLayout">
+	    
+	    <CheckBox 
+	        android:id="@+id/radius_toggle"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true" />
+	    <TextView 
+	        android:id="@+id/radius_toggle_text"
+	        android:textColor="#FFFFFF"
+	        android:textSize="16sp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content" 
+	        android:layout_toRightOf="@+id/radius_toggle"
+	        android:layout_centerVertical="true"
+	        android:text="Just Radius"/>       
+	</RelativeLayout>  --> 
+        
+
+</RelativeLayout>

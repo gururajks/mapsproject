@@ -5,5 +5,30 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings"/>
+    
+    <item
+        android:id="@+id/refresh_button"
+        android:showAsAction="always"
+        android:title="Refresh"
+        android:icon="@drawable/ic_navigation_refresh" />
+    
+    <item
+        android:id="@+id/request_types"
+        android:showAsAction="always"
+        android:title="Request" >
+        
+        <menu>
+            <item 
+                android:id="@+id/radius"
+                android:title="Radius" 
+                android:icon="@drawable/ic_collections_view_as_list"/>
+            <item 
+                android:id="@+id/pid"
+                android:title="PID" 
+                android:icon="@drawable/ic_collections_view_as_list"/>              
+            
+        </menu>
+        
+    </item>
 
 </menu>

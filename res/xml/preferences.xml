@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <ListPreference 
+        android:key="control_type" 
+        android:title="Control Type"
+        android:dialogTitle="Control Type" 
+        android:entries="@array/control_type"
+        android:entryValues="@array/control_type"
+        android:defaultValue="X-0-0"  
+        android:summary="Choose the control type" />
+    
+    <PreferenceCategory 
+        android:title="Map"
+        android:key="map_category">
+	    <CheckBoxPreference 
+	        android:key="gps_setting"
+	        android:defaultValue="true" 
+	        android:title="GPS Location" 
+	        android:summary="Disable to conserve power" />		
+	</PreferenceCategory>
+	
+	<PreferenceCategory 
+	    android:key="about_category"
+	    android:title="About">
+	    <Preference 
+	        android:key="about"
+	        android:title="About" />
+	    <Preference 
+	        android:key="feedback"
+	        android:title="Send Feedback / Bug reports" />
+	    
+	</PreferenceCategory>
+    
+</PreferenceScreen>
