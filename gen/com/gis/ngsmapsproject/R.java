@@ -188,25 +188,30 @@ containing a value of this type.
         public static final int ic_navigation_refresh=0x7f02001a;
     }
     public static final class id {
-        public static final int action_settings=0x7f06000b;
+        public static final int action_settings=0x7f06000f;
+        public static final int designationValue=0x7f060009;
         public static final int hybrid=0x7f060004;
+        public static final int latValue=0x7f060007;
+        public static final int lngValue=0x7f060008;
         public static final int map=0x7f060005;
         public static final int none=0x7f060000;
         public static final int normal=0x7f060001;
-        public static final int pid=0x7f06000e;
-        public static final int radius=0x7f060009;
-        public static final int radiusLayout=0x7f060008;
-        public static final int radius_latitude=0x7f060006;
-        public static final int radius_longitude=0x7f060007;
-        public static final int radius_unit=0x7f06000a;
-        public static final int refresh_button=0x7f06000c;
-        public static final int request_types=0x7f06000d;
+        public static final int pid=0x7f060012;
+        public static final int pidValue=0x7f060006;
+        public static final int radius=0x7f06000d;
+        public static final int radiusLayout=0x7f06000c;
+        public static final int radius_latitude=0x7f06000a;
+        public static final int radius_longitude=0x7f06000b;
+        public static final int radius_unit=0x7f06000e;
+        public static final int refresh_button=0x7f060010;
+        public static final int request_types=0x7f060011;
         public static final int satellite=0x7f060002;
         public static final int terrain=0x7f060003;
     }
     public static final class layout {
         public static final int activity_home=0x7f030000;
-        public static final int radius_dialog=0x7f030001;
+        public static final int infowindow_dialog=0x7f030001;
+        public static final int radius_dialog=0x7f030002;
     }
     public static final class menu {
         public static final int home=0x7f0b0000;

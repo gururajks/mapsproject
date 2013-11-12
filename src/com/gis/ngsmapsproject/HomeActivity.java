@@ -13,16 +13,19 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.support.ngsmapsproject.NgsDataDownloader;
 import com.support.ngsmapsproject.NgsHtmlParser;
 import com.support.ngsmapsproject.NgsParameters;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -67,7 +70,9 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 	    		gMapFragment.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 	    		gps_menu_setting = sharedPref.getBoolean(GPS_MENU_KEY, true);	    			    		
 	    		gMapFragment.setMyLocationEnabled(gps_menu_setting);	    		
-	    		getNgsDataByRadius(42.365647,-71.147171);
+	    		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(39.8282, -98.5795), 3);
+	    		gMapFragment.moveCamera(cameraUpdate);
+	    		//getNgsDataByRadius(42.365647,-71.147171);
 	    		//gMapFragment.setOnCameraChangeListener(new MapChangeListener());
 	    	}
 	    }		
@@ -139,12 +144,13 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
         	System.out.println("NGS Website: printed");
         	if(latLngList.size() != 0) {
         		
-        		Object tagListArray[] = latLngList.toArray();
+        		//Object tagListArray[] = latLngList.toArray();
         		for(int i = 0; i < latLngList.size(); i++) {
-        			NgsParameters ngsParam = (NgsParameters)tagListArray[i];
+        			NgsParameters ngsParam = latLngList.get(i);
         			LatLng monumentLocation = new LatLng(ngsParam.getLatitude(), ngsParam.getLongitude());
         			gMapFragment.addMarker(new MarkerOptions().position(monumentLocation).
         					title("PID: " + ngsParam.getPid()).snippet("Designation: " + ngsParam.getDesignation()));
+        			gMapFragment.setOnInfoWindowClickListener(new InfoWindowClickListener(ngsParam));
         		} 
         		setProgressBarIndeterminateVisibility(false);  
         		Toast.makeText(getApplicationContext(), "Monuments Displayed", Toast.LENGTH_LONG).show();
@@ -160,6 +166,28 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
         	
         }        	
     }
+	
+	class InfoWindowClickListener implements OnInfoWindowClickListener {
+		
+		NgsParameters ngsParam;
+		public InfoWindowClickListener(NgsParameters ngsParam) {
+			this.ngsParam = ngsParam;
+		}
+
+		@Override
+		public void onInfoWindowClick(Marker marker) {
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.ngs.noaa.gov/cgi-bin/ds_mark.prl?PidBox="+ngsParam.getPid())); 
+            startActivity(browserIntent);     			
+		}		
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);		
+		gps_menu_setting = sharedPref.getBoolean(GPS_MENU_KEY, true);
+		gMapFragment.setMyLocationEnabled(gps_menu_setting);
+	}
 	
 	    
 	@Override
