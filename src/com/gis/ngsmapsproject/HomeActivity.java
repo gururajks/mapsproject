@@ -54,6 +54,7 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 	private double radius_doubleForm = 1;
 	Circle circle;
 	public static double MILES_TO_KILOMETERS = 1.60934;
+	TextView radiusText;
 	
 
 	@Override
@@ -66,13 +67,13 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);		
 		controlType = sharedPref.getString(CONTROL_TYPE, "X-0-0");
 		
-		
+		radiusText = (TextView) findViewById(R.id.radiusText);
 		if(gMapFragment == null) {
 	    	gMapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 	    	if(gMapFragment != null) {
 	    		gMapFragment.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 	    		gps_menu_setting = sharedPref.getBoolean(GPS_MENU_KEY, true);	    			    		
-	    		gMapFragment.setMyLocationEnabled(gps_menu_setting);	    		
+	    		gMapFragment.setMyLocationEnabled(gps_menu_setting);	
 	    		getMapViewSettings();
 	    		//getNgsDataByRadius(42.365647,-71.147171);
 	    		//gMapFragment.setOnCameraChangeListener(new MapChangeListener());
@@ -93,6 +94,7 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 		circleOptions.strokeColor(Color.BLUE);	
 		circleOptions.strokeWidth(4);
 		circle = gMapFragment.addCircle(circleOptions);
+		setRadiusText();		
 		new DownloadWebpageText(coordinates).execute();		 
 	}
 	
@@ -151,11 +153,12 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
         			LatLng monumentLocation = new LatLng(ngsParam.getLatitude(), ngsParam.getLongitude());
         			gMapFragment.addMarker(new MarkerOptions().position(monumentLocation).
         					title("PID: " + ngsParam.getPid()).snippet("Designation: " + ngsParam.getDesignation()));
+        			
         			if(retrievalType.equals("PIDS")) {
         				CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(monumentLocation, 13);
         				gMapFragment.animateCamera(cameraUpdate);
         			}
-        			gMapFragment.setOnInfoWindowClickListener(new InfoWindowClickListener(ngsParam));
+        			gMapFragment.setOnInfoWindowClickListener(new InfoWindowClickListener());
         		} 
         		setProgressBarIndeterminateVisibility(false);  
         		Toast.makeText(getApplicationContext(), "Monuments Displayed", Toast.LENGTH_LONG).show();
@@ -173,15 +176,11 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
     }
 	
 	class InfoWindowClickListener implements OnInfoWindowClickListener {
-		
-		NgsParameters ngsParam;
-		public InfoWindowClickListener(NgsParameters ngsParam) {
-			this.ngsParam = ngsParam;
-		}
 
 		@Override
 		public void onInfoWindowClick(Marker marker) {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.ngs.noaa.gov/cgi-bin/ds_mark.prl?PidBox="+ngsParam.getPid())); 
+			String pidFull = marker.getTitle().substring(5);
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.ngs.noaa.gov/cgi-bin/ds_mark.prl?PidBox="+pidFull)); 
             startActivity(browserIntent);     			
 		}		
 	}
@@ -252,13 +251,18 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) { 
 		if(item.getItemId() == R.id.radius) {
-			DialogFragment radiusDialog = new RadiusDialog();
-			LatLng mapCenter = gMapFragment.getCameraPosition().target;
-			Bundle radiusDialogArgs = new Bundle();
-			radiusDialogArgs.putDouble("mapcenter_lat", mapCenter.latitude);
-			radiusDialogArgs.putDouble("mapcenter_lng", mapCenter.longitude);
-			radiusDialog.setArguments(radiusDialogArgs);			
-			radiusDialog.show(getSupportFragmentManager(), "Radius_Dialog");
+			if(gMapFragment != null) {
+				DialogFragment radiusDialog = new RadiusDialog();
+				LatLng mapCenter = gMapFragment.getCameraPosition().target;
+				Bundle radiusDialogArgs = new Bundle();
+				radiusDialogArgs.putDouble("mapcenter_lat", mapCenter.latitude);
+				radiusDialogArgs.putDouble("mapcenter_lng", mapCenter.longitude);
+				radiusDialog.setArguments(radiusDialogArgs);			
+				radiusDialog.show(getSupportFragmentManager(), "Radius_Dialog");
+			}
+			else {
+				Toast.makeText(this, "Google maps not available", Toast.LENGTH_SHORT).show();
+			}
 		}
 		if(item.getItemId() == R.id.pid) {
 			DialogFragment pidDialog = new PidDialog();
@@ -308,6 +312,10 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 			getNgsDataByRadius(dialog.getLat(), dialog.getLng());
 		}
 		
+	} 
+	
+	private void setRadiusText() {
+		radiusText.setText("Radius: " + radius + " miles"); 
 	}
 
 	@Override
