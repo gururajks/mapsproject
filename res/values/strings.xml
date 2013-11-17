@@ -7,24 +7,24 @@
 
     
     <string-array name="control_type">
-        <item >X-0-0</item>
-        <item >H-G-0</item>
-        <item >H-0-0</item>
-        <item >H-A-0</item>
-        <item >H-B-0</item>
-        <item >H-1-0</item>
-        <item >H-2-0</item>
-        <item >V-0-0</item>
-        <item >V-1-0</item>
-        <item >V-2-0</item>
-        <item >V-G-0</item>
-        <item >TID-0</item>
-        <item >MOD-0</item>
-        <item >GPS-0</item>
-        <item >F-C-0</item>
-        <item >P-S-0</item>
-        <item >COR-0</item>
-        <item >D-D-0</item>        
+        <item >X-0-0: Any Horz. and/or Vert. Control</item>
+        <item >H-G-0: GPS Sites Only</item>
+        <item >H-0-0: Any Horizontal Control</item>
+        <item >H-A-0: Horizontal Order-A</item>
+        <item >H-B-0: Horizontal Order-B or Better (HARN)</item>
+        <item >H-1-0: Horizontal Order-1 or Better</item>
+        <item >H-2-0: Horizontal Order-2 or Better</item>
+        <item >V-0-0: Any Vertical Control</item>
+        <item >V-1-0: Vertical Order-1</item>
+        <item >V-2-0: Vertical Order-2 or Better</item>
+        <item >V-G-0: Vertical Precise GPS or Better</item>
+        <item >TID-0: Vertical Tidal Bench Mark</item>
+        <item >MOD-0: Wisconsin Height Mod Station</item>
+        <item >GPS-0: GPS Height Mod Station</item>
+        <item >F-C-0: FBN and/or CBN</item>
+        <item >P-S-0: PAC and/or SAC</item>
+        <item >COR-0: CORS</item>
+        <item >D-D-0: Destroyed Marks Only (Normally not published)</item>        
     </string-array>
     
     <string-array name="radius_unit">

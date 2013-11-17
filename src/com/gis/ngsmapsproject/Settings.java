@@ -56,9 +56,9 @@ public class Settings extends PreferenceActivity {
 	public void sendFeedback() {
 		Intent intent = new Intent(Intent.ACTION_SEND);
 		intent.setType("message/rfc822");
-		intent.putExtra(Intent.EXTRA_EMAIL  , new String[]{"abcd@abcd.com"});
+		intent.putExtra(Intent.EXTRA_EMAIL  , new String[]{"gsridhar@carlsonsw.com"});
 		intent.putExtra(Intent.EXTRA_SUBJECT, "Bug/Feedback Report");
-		intent.putExtra(Intent.EXTRA_TEXT   , "body of email");
+		intent.putExtra(Intent.EXTRA_TEXT   , "");
 		try {
 		    startActivity(Intent.createChooser(intent, "Send mail..."));
 		} catch (ActivityNotFoundException ex) {

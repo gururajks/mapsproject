@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -52,7 +53,7 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 	private String radius = "1";
 	private double radius_doubleForm = 1;
 	Circle circle;
-	public static double MILES_TO_METERS = 1.60934;
+	public static double MILES_TO_KILOMETERS = 1.60934;
 	
 
 	@Override
@@ -64,14 +65,15 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);		
 		controlType = sharedPref.getString(CONTROL_TYPE, "X-0-0");
+		
+		
 		if(gMapFragment == null) {
 	    	gMapFragment = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
 	    	if(gMapFragment != null) {
 	    		gMapFragment.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 	    		gps_menu_setting = sharedPref.getBoolean(GPS_MENU_KEY, true);	    			    		
 	    		gMapFragment.setMyLocationEnabled(gps_menu_setting);	    		
-	    		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(39.8282, -98.5795), 3);
-	    		gMapFragment.moveCamera(cameraUpdate);
+	    		getMapViewSettings();
 	    		//getNgsDataByRadius(42.365647,-71.147171);
 	    		//gMapFragment.setOnCameraChangeListener(new MapChangeListener());
 	    	}
@@ -86,8 +88,8 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 		controlType = sharedPref.getString(CONTROL_TYPE, "X-0-0");
 		LatLng coordinates  = new LatLng(lat ,lng);
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(coordinates, 13);
-		gMapFragment.animateCamera(cameraUpdate);
-		CircleOptions circleOptions = new CircleOptions().center(coordinates).radius(radius_doubleForm * MILES_TO_METERS * 1000);
+		gMapFragment.animateCamera(cameraUpdate); 
+		CircleOptions circleOptions = new CircleOptions().center(coordinates).radius(radius_doubleForm * MILES_TO_KILOMETERS * 1000);
 		circleOptions.strokeColor(Color.BLUE);	
 		circleOptions.strokeWidth(4);
 		circle = gMapFragment.addCircle(circleOptions);
@@ -144,12 +146,15 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
         	System.out.println("NGS Website: printed");
         	if(latLngList.size() != 0) {
         		
-        		//Object tagListArray[] = latLngList.toArray();
-        		for(int i = 0; i < latLngList.size(); i++) {
+         		for(int i = 0; i < latLngList.size(); i++) {
         			NgsParameters ngsParam = latLngList.get(i);
         			LatLng monumentLocation = new LatLng(ngsParam.getLatitude(), ngsParam.getLongitude());
         			gMapFragment.addMarker(new MarkerOptions().position(monumentLocation).
         					title("PID: " + ngsParam.getPid()).snippet("Designation: " + ngsParam.getDesignation()));
+        			if(retrievalType.equals("PIDS")) {
+        				CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(monumentLocation, 13);
+        				gMapFragment.animateCamera(cameraUpdate);
+        			}
         			gMapFragment.setOnInfoWindowClickListener(new InfoWindowClickListener(ngsParam));
         		} 
         		setProgressBarIndeterminateVisibility(false);  
@@ -184,9 +189,56 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 	@Override
 	public void onResume() {
 		super.onResume();
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);		
-		gps_menu_setting = sharedPref.getBoolean(GPS_MENU_KEY, true);
-		gMapFragment.setMyLocationEnabled(gps_menu_setting);
+		if(gMapFragment != null) {
+			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);		
+			gps_menu_setting = sharedPref.getBoolean(GPS_MENU_KEY, true);
+			gMapFragment.setMyLocationEnabled(gps_menu_setting);
+			getMapViewSettings();
+		}
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		getMapViewSettings();
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		saveMapViewSettings();
+	}
+	
+	public void onStop() {
+		super.onStop();
+		saveMapViewSettings();
+	}
+	
+	//Gets the last state the application was left off
+	private void getMapViewSettings() {
+		if(gMapFragment != null) {			
+			SharedPreferences mapViewSettings = getSharedPreferences("Map_View", MODE_PRIVATE); 
+			float latitude = mapViewSettings.getFloat("mapview_latitude", (float)39.8282);
+			float longitude = mapViewSettings.getFloat("mapview_longitude",(float) -98.5795);
+			float zoom = mapViewSettings.getFloat("mapview_zoom", 3);
+			LatLng coordinates = new LatLng(latitude, longitude);			
+			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(coordinates, zoom);
+			gMapFragment.moveCamera(cameraUpdate);
+		}
+	}
+	
+	//Saves the current state of map view
+	private void saveMapViewSettings() {
+		if(gMapFragment != null) {
+			LatLng mapCenter = gMapFragment.getCameraPosition().target;
+			float zoom = gMapFragment.getCameraPosition().zoom;
+			SharedPreferences mapViewSettings = getSharedPreferences("Map_View", MODE_PRIVATE); 
+			SharedPreferences.Editor mapViewSettingsEditor = mapViewSettings.edit();
+			mapViewSettingsEditor.putFloat("mapview_latitude", (float) mapCenter.latitude);
+			mapViewSettingsEditor.putFloat("mapview_longitude", (float) mapCenter.longitude);
+			mapViewSettingsEditor.putFloat("mapview_zoom",  zoom);
+			mapViewSettingsEditor.commit();
+		}
 	}
 	
 	    
@@ -201,6 +253,11 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 	public boolean onMenuItemSelected(int featureId, MenuItem item) { 
 		if(item.getItemId() == R.id.radius) {
 			DialogFragment radiusDialog = new RadiusDialog();
+			LatLng mapCenter = gMapFragment.getCameraPosition().target;
+			Bundle radiusDialogArgs = new Bundle();
+			radiusDialogArgs.putDouble("mapcenter_lat", mapCenter.latitude);
+			radiusDialogArgs.putDouble("mapcenter_lng", mapCenter.longitude);
+			radiusDialog.setArguments(radiusDialogArgs);			
 			radiusDialog.show(getSupportFragmentManager(), "Radius_Dialog");
 		}
 		if(item.getItemId() == R.id.pid) {
@@ -241,11 +298,16 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 	public void onRadiusDialogClickOk(RadiusDialog dialog) {		
 		radius_doubleForm = dialog.getRadius();
 		radius = String.valueOf(dialog.getRadius());
-		circle.setCenter(new LatLng(dialog.getLat(), dialog.getLng()));
-		circle.setRadius(radius_doubleForm * MILES_TO_METERS);
+		LatLng radiusCenter = new LatLng(dialog.getLat(), dialog.getLng());
+		CircleOptions circleOptions = new CircleOptions().center(radiusCenter).radius(radius_doubleForm * MILES_TO_KILOMETERS * 1000);
+		circleOptions.strokeColor(Color.BLUE);	
+		circleOptions.strokeWidth(4);
+		circle = gMapFragment.addCircle(circleOptions);
+		
 		if(dialog.getLat() != 0 && dialog.getLng() != 0) {
 			getNgsDataByRadius(dialog.getLat(), dialog.getLng());
 		}
+		
 	}
 
 	@Override

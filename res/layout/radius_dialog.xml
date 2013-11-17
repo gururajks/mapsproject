@@ -1,14 +1,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-        
+    
+   
     <EditText
         android:id="@+id/radius_latitude" 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"        
+        android:layout_alignParentTop="true"        
         android:inputType="numberDecimal"
-        android:hint="Lattitude" />
+        android:hint="Latitude (DD.dddd)" />
     
     <EditText 
         android:id="@+id/radius_longitude"
@@ -16,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/radius_latitude"
         android:inputType="numberSigned|numberDecimal"
-        android:hint="Longitude" />
+        android:hint="Longitude (DDD.dddd)" />
     
     <LinearLayout 
         android:id="@+id/radiusLayout"
@@ -39,28 +40,15 @@
 	        android:layout_height="wrap_content"
 	        android:entries="@array/radius_unit" />        
     </LinearLayout>
-   <!-- 
-    <RelativeLayout 
-        android:id="@+id/radiusToggleLayout"
+    
+     <Button 
+        android:id="@+id/currentMapCenter"
+        android:layout_below="@+id/radiusLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/radiusLayout">
-	    
-	    <CheckBox 
-	        android:id="@+id/radius_toggle"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentLeft="true" />
-	    <TextView 
-	        android:id="@+id/radius_toggle_text"
-	        android:textColor="#FFFFFF"
-	        android:textSize="16sp"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" 
-	        android:layout_toRightOf="@+id/radius_toggle"
-	        android:layout_centerVertical="true"
-	        android:text="Just Radius"/>       
-	</RelativeLayout>  --> 
+        android:text="Get Map Center"/>
+    
+   
         
 
 </RelativeLayout>

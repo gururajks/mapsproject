@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="C:/Users/Gururaj/Downloads/adt-bundle-windows-x86_64-20130717/adt-bundle-windows-x86_64-20130717/sdk/extras/android/support/v4/android-support-v4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Gururaj/Downloads/adt-bundle-windows-x86_64-20130717/adt-bundle-windows-x86_64-20130717/sdk/extras/google/google_play_services/libproject/google-play-services_lib/libs/google-play-services.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Gururaj/Downloads/adt-bundle-windows-x86_64-20130717/adt-bundle-windows-x86_64-20130717/sdk/add-ons/addon-google_apis-google-16/libs/maps.jar"/>
+	<classpathentry kind="lib" path="libs/acra-4.5.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
