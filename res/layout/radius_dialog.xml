@@ -44,7 +44,7 @@
      <Button 
         android:id="@+id/currentMapCenter"
         android:layout_below="@+id/radiusLayout"
-        android:layout_width="match_parent"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:text="Get Map Center"/>
     

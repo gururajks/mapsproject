@@ -48,7 +48,7 @@ public class Settings extends PreferenceActivity {
 	public void about() {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 		dialog.setTitle("About");
-		dialog.setMessage("Author: Gururaj Sridhar \nBuild: 1.0.1");
+		dialog.setMessage("Author: Gururaj Sridhar \nBuild: 1.0.5");
 		dialog.show();
 	}
 	
