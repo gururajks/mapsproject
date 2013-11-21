@@ -10,16 +10,32 @@
         android:defaultValue="X-0-0"  
         android:summary="Choose the control type" />
     
-    <PreferenceCategory 
-        android:title="Map"
-        android:key="map_category">
-	    <CheckBoxPreference 
-	        android:key="gps_setting"
-	        android:defaultValue="true" 
-	        android:title="GPS Location" 
-	        android:summary="Disable to conserve power" />		
-	</PreferenceCategory>
+    
+    <CheckBoxPreference 
+        android:key="gps_setting"
+        android:defaultValue="true" 
+        android:title="GPS Location" 
+        android:summary="Disable to conserve power" />		
+ 
 	
+	<PreferenceCategory 
+	    android:key="acra_category"
+	    android:title="NGS Control Crash Reporting">
+	    <CheckBoxPreference 
+	        android:key="acra.enable"
+	        android:title="Enable Crash Reporting"
+	        android:defaultValue="false"
+	        android:summary="Enable only when required"/>
+	    <CheckBoxPreference 
+	        android:key="acra.syslog.enable"		    
+		    android:title="Include System logs"
+		    android:defaultValue="false"/>
+	     <EditTextPreference 
+	         android:key="acra.user.email"
+		    android:title="Email address"
+		    android:summary="Will help us contact you and debug the app"/>
+	</PreferenceCategory>
+    
 	<PreferenceCategory 
 	    android:key="about_category"
 	    android:title="About">

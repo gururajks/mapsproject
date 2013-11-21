@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.support.ngsmapsproject.NgsDataDownloader;
@@ -47,6 +48,7 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 	GoogleMap gMapFragment;
 	private final String GPS_MENU_KEY = "gps_setting";
 	private final String CONTROL_TYPE = "control_type";
+	public static double EARTH_RADIUS_IN_METERS = 6378.137;
 	boolean gps_menu_setting;
 	private String retrievalType = "RADIUS";
 	private String controlType = "X-0-0";
@@ -88,7 +90,9 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);		
 		controlType = sharedPref.getString(CONTROL_TYPE, "X-0-0");
 		LatLng coordinates  = new LatLng(lat ,lng);
+		LatLngBounds minMax = minMaxBounds(lat, lng, radius_doubleForm);
 		CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(coordinates, 13);
+		//CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(minMax, 2);
 		gMapFragment.animateCamera(cameraUpdate); 
 		CircleOptions circleOptions = new CircleOptions().center(coordinates).radius(radius_doubleForm * MILES_TO_KILOMETERS * 1000);
 		circleOptions.strokeColor(Color.BLUE);	
@@ -97,6 +101,25 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
 		setRadiusText();		
 		new DownloadWebpageText(coordinates).execute();		 
 	}
+	
+	
+	private LatLngBounds minMaxBounds(double lat, double lng,double radius_doubleForm) {
+		LatLng northeast = haversineLatLng(lat, lng, radius_doubleForm, 45);
+		LatLng southwest = haversineLatLng(lat, lng, radius_doubleForm, 225);
+		//LatLngBounds minMax = new LatLngBounds(southwest, northeast);				
+		return null; 
+	}
+	
+	//Uses the haversine formula to calculate the lat lng from a point at a given distance
+	//Ref: http://www.movable-type.co.uk/scripts/latlong.html
+	private LatLng haversineLatLng(double lat, double lng,double radius_doubleForm, double angle) {
+		angle = angle * (Math.PI / 180);		// convert to radians
+		double transformedLat = Math.asin(Math.sin(lat) * Math.cos(radius_doubleForm * MILES_TO_KILOMETERS * 1000/ EARTH_RADIUS_IN_METERS) + (Math.cos(lat) * Math.sin(radius_doubleForm * MILES_TO_KILOMETERS * 1000/ EARTH_RADIUS_IN_METERS) * Math.cos(angle)));   
+		double transformedLng = lng + Math.atan2(Math.sin(angle) * Math.sin(radius_doubleForm * MILES_TO_KILOMETERS * 1000/ EARTH_RADIUS_IN_METERS) * Math.cos(lat), Math.cos(radius_doubleForm * MILES_TO_KILOMETERS * 1000/ EARTH_RADIUS_IN_METERS) - (Math.sin(lat) * Math.sin(transformedLat)));
+		System.out.println("lat: " + transformedLat + " lng: " + transformedLng + " radius" + radius_doubleForm + " angle" + angle);
+		return new LatLng(transformedLat, transformedLng);
+	}
+	
 	
 	private void getNgsDataByPid(String pid) {
 		gMapFragment.clear();
@@ -145,7 +168,6 @@ public class HomeActivity extends FragmentActivity implements RadiusDialogListen
     	
 		// onPostExecute displays the results of the AsyncTask.        
         protected void onPostExecute(ArrayList<NgsParameters> latLngList) {            	     	    	
-        	System.out.println("NGS Website: printed");
         	if(latLngList.size() != 0) {
         		
          		for(int i = 0; i < latLngList.size(); i++) {
